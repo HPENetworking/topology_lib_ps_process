@@ -1,0 +1,11 @@
+{
+    "library_name": "topology_lib_ps_process",
+    "author": "maria alas",
+    "email": "maria.alas@hpe.com",
+    "repo_url": "yes",
+    "doc_url": "yes",
+    "project_name": "ps_process",
+    "short_description": "This function will execute ps command to list running processes",
+    "year": "2016",
+    "version": "0.1.0"
+}
