@@ -21,36 +21,38 @@ topology_lib_ps_process communication library implementation.
 
 from __future__ import unicode_literals, absolute_import
 from __future__ import print_function, division
+import re
 
-# Add your library functions here.
 
-
-def your_function_here(enode, your_param, shell=None):
+def get_pid_ps_efa_command(enode, grep=None, shell='bash'):
     """
-    Document your function here.
+    This command will execute PS command into the switch
+    ****IT IS CREATED FOR PS -FEA| GREP 'XXX' SO THE OUTPUT IS
+                    NOT CREATED FOR EVERY OPTION****
+    ******************                               ******************
+    -grep search by this parameter
 
-    :param topology.platforms.base.BaseNode enode: Engine node to communicate
-     with.
-    :param bool your_param: This is an example parameter, read the comment
-     below.
-    :param str shell: Shell name to execute commands.
     """
     pass
 
-    # Usually, the library functions use the parameters to build a command that
-    # is to be sent to the enode, for example:
+    # This function will send ps command to bash
     #
-    # command = 'echo "something"'
-    # if your_param:
-    #     command = '{command} "and something else"'.format(command=command)
-    #
-    # Then, the enode is used to send the command:
-    #
-    # enode('the command to be sent', shell=shell)
+    # command = 'ps -fea'
+    # enode('ps -fea | grep 'filter', shell=shell)
+
+    ps_command = 'ps -fea'
+    if grep:
+        ps_command = '{0} | grep \'{1}\''.format(ps_command, grep)
+
+    ps_response = enode(ps_command, shell=shell)
+    ps_re = (
+      r'\s+(?P<pid>\d+)\s+\d+\s+\d+'
+    )
+    re_result = re.findall(ps_re, ps_response)
+    assert re_result
+    return re_result
+
 
 __all__ = [
-    # The Topology framework loads the functions that are in this list to be
-    # used as libraries, so, if you want your function to be loaded, add it
-    # here.
-    'your_function_here'
+   'get_pid_ps_efa_command'
 ]
